@@ -1,5 +1,5 @@
 {
-  "version": "1.2.2",
-  "url": "https://github.com/gktmddn07101825-coder/Woobee/releases/download/1.2.2/update.zip",
-  "changelog": "- 새로운 아이콘 6종 추가 완료!\n- 자동 강제 로그아웃 기능 탑재\n- 자잘한 버그 수정"
+  "version": "1.2.3",
+  "url": "https://github.com/gktmddn07101825-coder/Woobee/releases/download/1.2.3/update.zip",
+  "changelog": "- 카테고리 별로 본인 직업게 맞게 버프 찾기 편하게 수정하였습니다. 메디테이션, 매직부스터, 보우부스터 버프가 추가 되었습니다"
 }
