@@ -70,6 +70,10 @@
     const known = {
       'Invalid login credentials': '아이디 또는 비밀번호를 확인해 주세요.',
       'LOGIN_FAILED': '아이디 또는 비밀번호가 올바르지 않아요.',
+      'SIGNUP_LIMIT': '가입 신청이 너무 많아요. 1시간 후 다시 시도해 주세요.',
+      'SIGNUP_UNAVAILABLE': '가입 서버에 문제가 있어요. 운영자에게 문의해 주세요.',
+      'SIGNUP_FAILED': '회원가입을 처리하지 못했어요. 잠시 후 다시 시도해 주세요.',
+      'INVALID_NICKNAME': '게임 닉네임(본캐릭터)은 1~32자로 입력해 주세요.',
       'USERNAME_TAKEN': '이미 사용 중인 아이디예요.',
       'INVALID_USERNAME': '아이디는 영문 소문자·숫자·밑줄 4~24자로 입력해 주세요.',
       'INVALID_PASSWORD': '비밀번호는 8~128자로 입력해 주세요.',
@@ -345,24 +349,9 @@
         throw new Error('아이디는 영문·숫자·밑줄 4~24자, 게임 닉네임(본캐릭터)은 1~32자로 입력해 주세요.');
       const password = $('signupPassword').value;
       if (password.length < 8 || password.length > 128) throw new Error('비밀번호는 8~128자로 입력해 주세요.');
-      // Supabase Auth internally requires an email/phone identity. Generate a
-      // non-deliverable, opaque technical alias; never ask users for an email.
-      // This alias is stable in Auth even if an admin later changes username.
-      // getRandomValues also works where randomUUID is unavailable (file previews,
-      // older browsers). Never use Math.random for account identifiers.
-      if (!globalThis.crypto?.getRandomValues) throw new Error('안전한 브라우저에서 다시 시도해 주세요.');
-      const randomBytes = new Uint8Array(20);
-      globalThis.crypto.getRandomValues(randomBytes);
-      const alias = 'bt-' + Array.from(randomBytes, x => x.toString(16).padStart(2, '0')).join('') + '@example.com';
-      const value = await request('/auth/v1/signup', {
-        email: alias, password, data: {username, display_name}
-      });
-      if (!value?.user?.id || !value?.access_token || value?.user?.identities?.length === 0)
-        throw new Error('Supabase에서 이메일 확인(Confirm Email)을 끄고 다시 가입해 주세요.');
-      // Do not keep an unapproved member auto-signed-in on signup.
-      if (value?.access_token) {
-        try { await request('/auth/v1/logout', {}, value.access_token); } catch (_) {}
-      }
+      // Email is not requested from members. A protected Edge Function creates
+      // the Auth account on the server without sending an email.
+      await accountAction('register', {username, display_name, password});
       form.reset();
       $('loginUsername').value = username;
       selectTab('login');
