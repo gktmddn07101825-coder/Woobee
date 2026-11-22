@@ -37,8 +37,9 @@
         <p class="hero-copy">자주 쓰는 버프를 편리하게 관리하고, 내 프리셋은 클라우드에 안전하게 저장하세요. PC가 바뀌어도 익숙한 설정 그대로.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#member">무료로 시작하기 <span aria-hidden="true">↗</span></a>
-          <a class="btn btn-outline" href="https://github.com/gktmddn07101825-coder/Woobee/releases" target="_blank" rel="noopener noreferrer">프로그램 배포 목록 <span aria-hidden="true">↗</span></a>
+          <a id="latestDownload" class="btn btn-outline download-unavailable" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1"><span class="download-button-text">최신 버전 확인 중…</span><span aria-hidden="true">↓</span></a>
         </div>
+        <p id="downloadStatus" class="download-status" role="status" aria-live="polite">GitHub의 최신 버전을 확인하고 있어요.</p>
         <div class="hero-meta"><span>✓ 계정별 프리셋</span><span>✓ 관리자 승인</span><span>✓ Windows 오버레이</span></div>
       </div>
       <div class="hero-visual" aria-label="버프타이머 스타일 미리보기">
@@ -126,7 +127,7 @@
           <div class="account-actions"><button id="refreshButton" class="btn btn-outline" type="button">새로고침</button><button id="logoutButton" class="btn btn-plain" type="button">로그아웃</button></div>
         </div>
         <div class="account-helper"><div class="account-helper-icon">✦</div><div><strong id="accountHelpTitle">클라우드 연결됨</strong><p id="accountHelp">프리셋은 Windows 앱에서 동기화할 수 있어요.</p></div></div>
-        <div id="accountDetails" class="account-details" hidden><div><span>저장된 프리셋</span><strong id="presetCount">—</strong></div><div><span>선택한 프리셋</span><strong id="currentPreset">—</strong></div><div><span>업데이트 배포</span><a href="https://github.com/gktmddn07101825-coder/Woobee/releases" target="_blank" rel="noopener noreferrer">GitHub에서 확인 ↗</a></div></div>
+        <div id="accountDetails" class="account-details" hidden><div><span>저장된 프리셋</span><strong id="presetCount">—</strong></div><div><span>선택한 프리셋</span><strong id="currentPreset">—</strong></div><div><span>Windows 프로그램</span><a id="accountDownload" class="download-unavailable" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">최신 버전 확인 중…</a></div></div>
       </section>
 
       <section id="adminPanel" class="admin-dashboard" hidden aria-labelledby="admin-title">

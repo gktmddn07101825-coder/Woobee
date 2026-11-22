@@ -15,6 +15,43 @@
   let loadingUsers = false;
   let noticeTimeout = null;
 
+  // Use the SAME manifest as the Windows auto-updater. Never guess what "latest" means:
+  // other programs may publish Releases in the shared Woobee repository.
+  async function loadLatestDownload() {
+    const hero = $('latestDownload');
+    const account = $('accountDownload');
+    const message = $('downloadStatus');
+    if (!hero || !account || !message) return;
+    try {
+      const response = await fetch('./version.json', {cache: 'no-store'});
+      if (!response.ok) throw new Error('manifest unavailable');
+      const manifest = await response.json();
+      const version = String(manifest?.version || '');
+      if (!/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(version))
+        throw new Error('invalid version');
+      // Pin the downloadable asset to our product and matching version, not to
+      // "releases/latest" (which could be the *other* Woobee application).
+      const expected = `https://github.com/gktmddn07101825-coder/Woobee/releases/download/bufftimer-v${version}/bufftimer-windows-v${version}.zip`;
+      if (manifest.url !== expected) throw new Error('invalid release URL');
+      if (typeof manifest.sha256 !== 'string' || !/^[0-9a-f]{64}$/i.test(manifest.sha256))
+        throw new Error('invalid checksum');
+      for (const link of [hero, account]) {
+        link.href = expected;
+        link.removeAttribute('aria-disabled');
+        link.removeAttribute('tabindex');
+        link.classList.remove('download-unavailable');
+      }
+      hero.querySelector('.download-button-text').textContent = '최신 버전 다운로드';
+      account.textContent = `v${version} 다운로드 ↗`;
+      message.textContent = `현재 배포 버전 v${version} · Windows용 ZIP`; // Published release only.
+    } catch (_) {
+      // Do not silently send visitors to an unrelated release list or an old ZIP.
+      hero.querySelector('.download-button-text').textContent = '다운로드 준비 중';
+      account.textContent = '다운로드 정보 확인 필요';
+      message.textContent = '버전 정보를 불러오지 못했어요. 잠시 후 다시 확인해 주세요.';
+    }
+  }
+
   function notice(message, isError = false) {
     clearTimeout(noticeTimeout);
     const node = $('notice');
@@ -322,6 +359,8 @@
   window.setInterval(() => {
     if (profile?.role === 'admin' && profile?.status === 'approved' && !document.hidden) loadUsers();
   }, 30000);
+  // Download link is public and independent of Supabase login/configuration.
+  void loadLatestDownload();
   if (!validateConfig()) {
     $('setupNotice').hidden = false;
     for (const form of [$('loginForm'), $('signupForm')]) lockForm(form, true);
