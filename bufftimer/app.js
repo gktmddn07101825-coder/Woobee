@@ -24,7 +24,7 @@
     const message = $('downloadStatus');
     if (!hero || !account || !message) return;
     try {
-      const response = await fetch('./version.json', {cache: 'no-store'});
+      const response = await fetch('./version-exe.json', {cache: 'no-store'});
       if (!response.ok) throw new Error('manifest unavailable');
       const manifest = await response.json();
       const version = String(manifest?.version || '');
@@ -32,7 +32,7 @@
         throw new Error('invalid version');
       // Pin the downloadable asset to our product and matching version, not to
       // "releases/latest" (which could be the *other* Woobee application).
-      const expected = `https://github.com/gktmddn07101825-coder/Woobee/releases/download/bufftimer-v${version}/bufftimer-windows-v${version}.zip`;
+      const expected = `https://github.com/gktmddn07101825-coder/Woobee/releases/download/bufftimer-v${version}/BuffTimer.exe`;
       if (manifest.url !== expected) throw new Error('invalid release URL');
       if (typeof manifest.sha256 !== 'string' || !/^[0-9a-f]{64}$/i.test(manifest.sha256))
         throw new Error('invalid checksum');
@@ -44,9 +44,9 @@
       }
       hero.querySelector('.download-button-text').textContent = '최신 버전 다운로드';
       account.textContent = `v${version} 다운로드 ↗`;
-      message.textContent = `현재 배포 버전 v${version} · Windows용 ZIP`; // Published release only.
+      message.textContent = `현재 배포 버전 v${version} · Windows EXE · 압축 해제 불필요`; // Published release only.
     } catch (_) {
-      // Do not silently send visitors to an unrelated release list or an old ZIP.
+      // Do not silently send visitors to an unrelated release list or an old EXE.
       hero.querySelector('.download-button-text').textContent = '다운로드 준비 중';
       account.textContent = '다운로드 정보 확인 필요';
       message.textContent = '버전 정보를 불러오지 못했어요. 잠시 후 다시 확인해 주세요.';

@@ -1,0 +1,6 @@
+{
+  "version": "2.3.4",
+  "url": "https://github.com/gktmddn07101825-coder/Woobee/releases/download/bufftimer-v2.3.4/BuffTimer.exe",
+  "sha256": "39a1b3269e815ba772cba9098bf03b2fd6bbaf5a18c4214921d5fdb3693575d8",
+  "changelog": "버프타이머 2.3.4: 단일 EXE 배포, EXE 자동 업데이트 지원. 기존 로그인/프리셋/오버레이 유지"
+}
