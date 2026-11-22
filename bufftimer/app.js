@@ -342,7 +342,7 @@
       const username = $('signupUsername').value.trim().toLowerCase();
       const display_name = $('signupNickname').value.trim();
       if (!/^[a-z0-9_]{4,24}$/.test(username) || display_name.length < 1 || display_name.length > 32)
-        throw new Error('아이디는 영문·숫자·밑줄 4~24자, 닉네임은 1~32자로 입력해 주세요.');
+        throw new Error('아이디는 영문·숫자·밑줄 4~24자, 게임 닉네임(본캐릭터)은 1~32자로 입력해 주세요.');
       const password = $('signupPassword').value;
       if (password.length < 8 || password.length > 128) throw new Error('비밀번호는 8~128자로 입력해 주세요.');
       // Supabase Auth internally requires an email/phone identity. Generate a
@@ -418,9 +418,9 @@
       const username = $('editUsername').value.trim().toLowerCase();
       const display_name = $('editNickname').value.trim();
       if (!/^[a-z0-9_]{4,24}$/.test(username) || display_name.length < 1 || display_name.length > 32)
-        throw new Error('아이디는 영문·숫자·밑줄 4~24자, 닉네임은 1~32자로 입력해 주세요.');
+        throw new Error('아이디는 영문·숫자·밑줄 4~24자, 게임 닉네임(본캐릭터)은 1~32자로 입력해 주세요.');
       await rpc('bt_admin_edit_profile', {target_id: targetId, new_username: username, new_display_name: display_name});
-      notice('아이디와 닉네임을 변경했어요.');
+      notice('아이디와 게임 닉네임을 변경했어요.');
       if (targetId === profile?.id) await loadAccount();
       else await loadUsers();
       closeMemberEditor();
