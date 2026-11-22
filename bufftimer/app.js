@@ -14,6 +14,7 @@
   let activeFilter = 'all';
   let loadingUsers = false;
   let noticeTimeout = null;
+  let editTargetId = null;
 
   // Use the SAME manifest as the Windows auto-updater. Never guess what "latest" means:
   // other programs may publish Releases in the shared Woobee repository.
@@ -67,10 +68,18 @@
   function reportError(error) {
     const raw = String(error?.message || error || '알 수 없는 오류');
     const known = {
-      'Invalid login credentials': '이메일 또는 비밀번호를 확인해 주세요.',
+      'Invalid login credentials': '아이디 또는 비밀번호를 확인해 주세요.',
+      'LOGIN_FAILED': '아이디 또는 비밀번호가 올바르지 않아요.',
+      'USERNAME_TAKEN': '이미 사용 중인 아이디예요.',
+      'INVALID_USERNAME': '아이디는 영문 소문자·숫자·밑줄 4~24자로 입력해 주세요.',
+      'INVALID_PASSWORD': '비밀번호는 8~128자로 입력해 주세요.',
+      'ADMIN_PASSWORD_INVALID': '관리자 본인 비밀번호가 올바르지 않아요.',
+      'CANNOT_CHANGE_ADMIN': '다른 관리자 계정은 수정할 수 없어요.',
+      'USER_NOT_FOUND': '회원 계정을 찾을 수 없어요.',
+      '23505': '이미 사용 중인 아이디예요.',
       'Email not confirmed': '이메일 인증이 필요합니다. 인증 메일을 확인해 주세요.',
-      'User already registered': '이미 가입된 이메일입니다.',
-      'email rate limit exceeded': '잠시 후 다시 시도해 주세요. 이메일 발송 제한이 적용됐습니다.',
+      'User already registered': '이미 가입된 계정입니다.',
+      'email rate limit exceeded': '잠시 후 다시 시도해 주세요.',
       'ADMIN_REQUIRED': '관리자 권한이 없습니다.',
       'APPROVAL_REQUIRED': '승인되지 않은 계정입니다.',
       'PROFILE_MISSING': '회원 프로필이 없습니다. 관리자에게 문의해 주세요.',
@@ -106,7 +115,7 @@
     $('tabSignup').tabIndex = login ? -1 : 0;
     $('loginPane').hidden = !login;
     $('signupPane').hidden = login;
-    if (focus) (login ? $('loginEmail') : $('signupUsername')).focus();
+    if (focus) (login ? $('loginUsername') : $('signupUsername')).focus();
   }
   function validateConfig() {
     try {
@@ -163,6 +172,11 @@
       return request('/rest/v1/rpc/' + name, body, newToken);
     }
   }
+  async function accountAction(action, payload, authorized = false) {
+    // Only publishable key is sent. Admin privileges are checked inside the Edge Function.
+    const token = authorized ? await fresh() : null;
+    return request('/functions/v1/bt-account', {action, ...payload}, token);
+  }
   function koreanDate(iso) {
     if (!iso) return '접속 기록 없음';
     const d = new Date(iso);
@@ -185,14 +199,14 @@
     profile = me;
     setScreen(true);
     $('hello').textContent = `${me.display_name}님, 반가워요!`;
-    $('accountInfo').textContent = '@' + me.username + ' · ' + me.email;
+    $('accountInfo').textContent = '@' + me.username;
     $('avatar').textContent = (me.display_name || 'B').trim().charAt(0).toUpperCase();
     const badge = $('accountStatus');
     badge.className = 'status-badge' + (me.status === 'pending' ? ' wait' : me.status === 'blocked' ? ' blocked' : '');
     badge.textContent = statusText(me.status);
     $('accountHelpTitle').textContent = me.status === 'approved' ? '계정 승인이 완료됐어요.' : me.status === 'pending' ? '관리자 승인을 기다리고 있어요.' : '계정 사용이 중지됐어요.';
     $('accountHelp').textContent = me.status === 'approved'
-      ? 'Windows 버프타이머에서 가입한 이메일과 비밀번호로 로그인하세요. 프리셋을 동기화할 수 있어요.'
+      ? 'Windows 버프타이머에서 사이트 아이디와 비밀번호로 로그인하세요. 프리셋을 동기화할 수 있어요.'
       : me.status === 'pending'
         ? '관리자가 가입 신청을 승인하면 Windows 버프타이머를 사용할 수 있어요.'
         : '관리자에게 문의해 주세요. 승인되지 않은 계정은 프로그램에 로그인할 수 없습니다.';
@@ -240,6 +254,21 @@
     });
     return button;
   }
+  function openMemberEditor(row) {
+    editTargetId = row.id;
+    $('editUsername').value = row.username || '';
+    $('editNickname').value = row.display_name || '';
+    $('resetNewPassword').value = '';
+    $('resetAdminPassword').value = '';
+    $('editMemberHint').textContent = '@' + row.username + ' · 관리자가 변경한 내용은 다음 로그인부터 적용돼요.';
+    $('editMemberDialog').showModal();
+  }
+  function closeMemberEditor() {
+    $('editMemberDialog').close();
+    editTargetId = null;
+    $('resetNewPassword').value = '';
+    $('resetAdminPassword').value = '';
+  }
   function renderUsers() {
     const parent = $('usersList');
     const rows = filterRows();
@@ -265,6 +294,11 @@
       const badge = element('span', statusText(row.status), 'user-status ' + row.status);
       const actions = element('div', null, 'user-actions');
       actions.append(actionButton('승인', 'approved', row), actionButton('대기', 'pending', row), actionButton('차단', 'blocked', row));
+      const edit = element('button', '정보 수정', 'action-btn user-action-edit');
+      edit.type = 'button';
+      edit.disabled = row.role === 'admin' && row.id !== profile?.id;
+      edit.addEventListener('click', () => openMemberEditor(row));
+      actions.append(edit);
       wrapper.append(avatar, main, badge, actions);
       frag.append(wrapper);
     }
@@ -307,18 +341,32 @@
     try {
       const username = $('signupUsername').value.trim().toLowerCase();
       const display_name = $('signupNickname').value.trim();
-      const email = $('signupEmail').value.trim();
       if (!/^[a-z0-9_]{4,24}$/.test(username) || display_name.length < 1 || display_name.length > 32)
         throw new Error('아이디는 영문·숫자·밑줄 4~24자, 닉네임은 1~32자로 입력해 주세요.');
+      const password = $('signupPassword').value;
+      if (password.length < 8 || password.length > 128) throw new Error('비밀번호는 8~128자로 입력해 주세요.');
+      // Supabase Auth internally requires an email/phone identity. Generate a
+      // non-deliverable, opaque technical alias; never ask users for an email.
+      // This alias is stable in Auth even if an admin later changes username.
+      // getRandomValues also works where randomUUID is unavailable (file previews,
+      // older browsers). Never use Math.random for account identifiers.
+      if (!globalThis.crypto?.getRandomValues) throw new Error('안전한 브라우저에서 다시 시도해 주세요.');
+      const randomBytes = new Uint8Array(20);
+      globalThis.crypto.getRandomValues(randomBytes);
+      const alias = 'bt-' + Array.from(randomBytes, x => x.toString(16).padStart(2, '0')).join('') + '@example.com';
       const value = await request('/auth/v1/signup', {
-        email, password: $('signupPassword').value, data: {username, display_name}
+        email: alias, password, data: {username, display_name}
       });
+      if (!value?.user?.id || !value?.access_token || value?.user?.identities?.length === 0)
+        throw new Error('Supabase에서 이메일 확인(Confirm Email)을 끄고 다시 가입해 주세요.');
+      // Do not keep an unapproved member auto-signed-in on signup.
+      if (value?.access_token) {
+        try { await request('/auth/v1/logout', {}, value.access_token); } catch (_) {}
+      }
       form.reset();
-      $('loginEmail').value = email;
+      $('loginUsername').value = username;
       selectTab('login');
-      notice(value?.user?.identities?.length === 0
-        ? '가입 정보가 접수됐어요. 이미 사용 중인 이메일이라면 기존 계정으로 로그인해 주세요.'
-        : '가입 신청이 접수됐어요! 이메일 인증 설정에 따라 인증 후 로그인하고, 관리자 승인을 기다려 주세요.');
+      notice('가입 신청이 접수됐어요! 관리자 승인 후 아이디와 비밀번호로 로그인해 주세요.');
     } catch (error) { reportError(error); }
     finally { lockForm(form, false); }
   });
@@ -327,8 +375,10 @@
     const form = e.currentTarget;
     lockForm(form, true);
     try {
-      const response = await request('/auth/v1/token?grant_type=password', {
-        email: $('loginEmail').value.trim(), password: $('loginPassword').value
+      const username = $('loginUsername').value.trim().toLowerCase();
+      if (!/^[a-z0-9_]{4,24}$/.test(username)) throw new Error('아이디 형식을 확인해 주세요.');
+      const response = await accountAction('login', {
+        username, password: $('loginPassword').value
       });
       session = {...response, expires_at: Math.floor(Date.now() / 1000) + Number(response.expires_in || 3600)};
       saveSession();
@@ -356,6 +406,45 @@
       renderUsers();
     });
   }
+  $('editMemberClose').addEventListener('click', closeMemberEditor);
+  $('editMemberDialog').addEventListener('close', () => { editTargetId = null; $('resetNewPassword').value = ''; $('resetAdminPassword').value = ''; });
+  $('editProfileForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!editTargetId) return;
+    const form = e.currentTarget;
+    const targetId = editTargetId;
+    lockForm(form, true);
+    try {
+      const username = $('editUsername').value.trim().toLowerCase();
+      const display_name = $('editNickname').value.trim();
+      if (!/^[a-z0-9_]{4,24}$/.test(username) || display_name.length < 1 || display_name.length > 32)
+        throw new Error('아이디는 영문·숫자·밑줄 4~24자, 닉네임은 1~32자로 입력해 주세요.');
+      await rpc('bt_admin_edit_profile', {target_id: targetId, new_username: username, new_display_name: display_name});
+      notice('아이디와 닉네임을 변경했어요.');
+      if (targetId === profile?.id) await loadAccount();
+      else await loadUsers();
+      closeMemberEditor();
+    } catch (error) { reportError(error); }
+    finally { lockForm(form, false); }
+  });
+  $('resetMemberForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!editTargetId) return;
+    const form = e.currentTarget;
+    const targetId = editTargetId;
+    if (!confirm('선택한 회원의 비밀번호를 새 비밀번호로 재설정할까요?')) return;
+    lockForm(form, true);
+    try {
+      await accountAction('reset_password', {
+        target_id: targetId,
+        new_password: $('resetNewPassword').value,
+        admin_password: $('resetAdminPassword').value
+      }, true);
+      notice('비밀번호를 재설정했어요. 새 비밀번호는 회원에게 안전한 경로로 전달해 주세요.');
+      closeMemberEditor();
+    } catch (error) { reportError(error); }
+    finally { lockForm(form, false); }
+  });
   window.setInterval(() => {
     if (profile?.role === 'admin' && profile?.status === 'approved' && !document.hidden) loadUsers();
   }, 30000);

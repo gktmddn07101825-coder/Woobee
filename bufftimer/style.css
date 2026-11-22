@@ -14,3 +14,20 @@
 .download-status{margin:10px 0 -5px;color:#8c9ebc;font-size:11px;min-height:17px;letter-spacing:.01em}
 .download-unavailable{opacity:.65!important;pointer-events:none;cursor:not-allowed!important;filter:saturate(.7)}
 #accountDownload{white-space:normal}
+
+/* v2.3.0: compact member editing dialog (no email required) */
+.member-dialog { width:min(500px,calc(100% - 28px)); max-height:calc(100vh - 36px); overflow-y:auto;
+ border:1px solid #6f719b; border-radius:20px; padding:26px; color:#eef2ff;
+ background:#171f35; box-shadow:0 28px 75px #0009; }
+.member-dialog::backdrop {background:rgba(3,7,20,.76);backdrop-filter:blur(6px)}
+.member-dialog .dialog-head {display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:16px}
+.member-dialog .dialog-head h4 {font-size:22px; margin:7px 0}
+.member-dialog .dialog-hint {font-size:12px;line-height:1.6;color:#aebdd6;margin:6px 0 12px}
+.member-dialog .dialog-close {background:#252f4c;border:1px solid #495575;border-radius:10px;color:#fff;padding:8px 12px;cursor:pointer}
+.member-dialog .input-form {display:flex;flex-direction:column;gap:10px}
+.member-dialog .input-form label {font-size:13px}
+.member-dialog .input-form input {width:100%;padding:12px 14px;min-height:43px;background:#0d1529;color:#fff;border:1px solid #53627e;border-radius:10px}
+.member-dialog .input-form button {margin-top:10px}
+.member-dialog .dialog-divider {height:1px;background:#384764;margin:22px 0}
+.member-dialog .input-form h4 {margin:0;font-size:16px}
+.member-dialog .user-action-edit {background:#273d59;color:#d7eeff}
