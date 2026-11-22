@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="버프타이머 - 게임은 더 편하게, 설정은 어디서나. 회원 승인과 클라우드 프리셋 동기화.">
+  <title>버프타이머 — 나만의 버프를, 어디서나</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="background-light light-a" aria-hidden="true"></div>
+  <div class="background-light light-b" aria-hidden="true"></div>
+  <header class="header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#top" aria-label="버프타이머 홈">
+        <span class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="17" r="9" stroke="currentColor" stroke-width="2.6"/><path d="M16 11v6l4 2M12 4h8M24 7l2.5 2.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="logo-text">버프타이머<span class="logo-sub">BUFF TIMER</span></span>
+      </a>
+      <nav class="nav" aria-label="주 메뉴">
+        <a href="#features">서비스 소개</a>
+        <a href="#how">이용 방법</a>
+        <a class="nav-link-cta" href="#member">시작하기 <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <main id="top">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> 당신의 플레이를 위한 가벼운 도구</div>
+        <h1 id="hero-title">버프 시간은<br><span class="headline-gradient">우리가 기억할게요.</span></h1>
+        <p class="hero-copy">자주 쓰는 버프를 편리하게 관리하고, 내 프리셋은 클라우드에 안전하게 저장하세요. PC가 바뀌어도 익숙한 설정 그대로.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#member">무료로 시작하기 <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-outline" href="https://github.com/gktmddn07101825-coder/Woobee/releases" target="_blank" rel="noopener noreferrer">프로그램 배포 목록 <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-meta"><span>✓ 계정별 프리셋</span><span>✓ 관리자 승인</span><span>✓ Windows 오버레이</span></div>
+      </div>
+      <div class="hero-visual" aria-label="버프타이머 스타일 미리보기">
+        <div class="visual-window">
+          <div class="window-top"><span class="window-dots"><i></i><i></i><i></i></span><span>BUFF TIMER · PREVIEW</span><span class="window-top-indicator">● READY</span></div>
+          <div class="window-body">
+            <div class="window-title-line"><div><span class="overline">MY PRESET</span><strong>오늘의 사냥 세팅</strong></div><span class="window-swap">▥</span></div>
+            <div class="timer-example"><span class="timer-emoji">✧</span><div class="timer-text"><strong>샤프 아이즈</strong><span>활성화된 버프</span></div><span class="timer-value">04:32</span></div>
+            <div class="visual-progress"><i style="width:73%"></i></div>
+            <div class="timer-example"><span class="timer-emoji lilac">✦</span><div class="timer-text"><strong>부스터</strong><span>활성화된 버프</span></div><span class="timer-value">02:18</span></div>
+            <div class="visual-progress alt"><i style="width:46%"></i></div>
+            <div class="timer-example"><span class="timer-emoji coral">◈</span><div class="timer-text"><strong>하이퍼바디</strong><span>대기 중</span></div><span class="timer-value inactive">--:--</span></div>
+            <div class="window-bottom"><span class="sync-indicator">● 클라우드 저장됨</span><span>F1 · F2 · F3</span></div>
+          </div>
+        </div>
+        <span class="hero-floating floating-one">✦ 자동 프리셋 동기화</span>
+        <span class="hero-floating floating-two">내 설정 그대로, 어디에서나</span>
+        <p class="preview-disclaimer">※ 화면 디자인 예시이며 실제 버프 실행 상태가 아닙니다.</p>
+      </div>
+    </section>
+
+    <section class="features-section wrap" id="features" aria-labelledby="features-title">
+      <div class="section-heading"><span class="kicker">WHY BUFF TIMER</span><h2 id="features-title">필요한 기능만, 더 편하게.</h2><p>사냥에 방해되지 않으면서 자주 쓰는 기능은 빠르게 접근할 수 있도록 만들었어요.</p></div>
+      <div class="features-grid">
+        <article class="feature"><span class="feature-icon">◷</span><h3>가벼운 오버레이</h3><p>게임 화면 위에서 남은 시간을 확인하고, 필요하면 클릭 통과 모드로 잠글 수 있어요.</p></article>
+        <article class="feature"><span class="feature-icon">⇄</span><h3>어디서나 같은 설정</h3><p>버프 이름, 지속시간, 단축키, 개인 프리셋을 계정에 저장해 다른 PC에서도 불러와요.</p></article>
+        <article class="feature"><span class="feature-icon">♢</span><h3>승인된 회원만 이용</h3><p>회원가입 후 관리자 승인으로 사용 권한을 관리하고, 접속 상태도 한눈에 확인해요.</p></article>
+      </div>
+    </section>
+
+    <section id="member" class="member-section wrap" aria-labelledby="member-title">
+      <div class="section-heading member-heading"><span class="kicker">YOUR BUFF TIMER ACCOUNT</span><h2 id="member-title">지금 시작해 보세요.</h2><p>사이트 회원과 Windows 프로그램 계정을 하나로 관리합니다.</p></div>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <div id="setupNotice" class="setup-notice" hidden><strong>사이트 연결이 아직 설정되지 않았어요.</strong><span>사이트 운영자가 Supabase 프로젝트 URL과 공개 키를 <code>config.js</code>에 넣으면 가입과 로그인이 활성화됩니다.</span></div>
+
+      <section id="authPanel" class="auth-layout" aria-label="회원 로그인과 가입">
+        <div class="auth-card">
+          <div class="auth-tabs" role="tablist" aria-label="계정 접속 방식">
+            <button id="tabLogin" class="auth-tab active" type="button" role="tab" aria-selected="true" aria-controls="loginPane">로그인</button>
+            <button id="tabSignup" class="auth-tab" type="button" role="tab" aria-selected="false" aria-controls="signupPane">회원가입</button>
+          </div>
+          <div id="loginPane" class="auth-pane" role="tabpanel" aria-labelledby="tabLogin">
+            <h3>다시 오셨네요! <span class="wave" aria-hidden="true">✦</span></h3>
+            <p>가입한 계정으로 로그인해 주세요.</p>
+            <form id="loginForm" class="input-form">
+              <label for="loginEmail">이메일 <span class="label-caption">· 로그인 아이디</span></label>
+              <input id="loginEmail" type="email" autocomplete="username" placeholder="you@example.com" maxlength="254" required>
+              <label for="loginPassword">비밀번호</label>
+              <input id="loginPassword" type="password" autocomplete="current-password" placeholder="비밀번호를 입력해 주세요" required>
+              <button class="btn btn-primary form-submit" type="submit">로그인하기 <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="form-switch">계정이 없으신가요? <button type="button" id="goSignup" class="text-button">회원가입하기</button></p>
+          </div>
+          <div id="signupPane" class="auth-pane" role="tabpanel" aria-labelledby="tabSignup" hidden>
+            <h3>계정을 만들어 볼까요?</h3>
+            <p>가입 후 관리자가 승인하면 버프타이머를 사용할 수 있어요.</p>
+            <form id="signupForm" class="input-form">
+              <label for="signupUsername">사이트 아이디 <span class="label-caption">· 영문/숫자/밑줄 4~24자</span></label>
+              <input id="signupUsername" autocomplete="off" minlength="4" maxlength="24" pattern="[A-Za-z0-9_]{4,24}" placeholder="buffplayer" required>
+              <label for="signupNickname">닉네임</label>
+              <input id="signupNickname" autocomplete="nickname" maxlength="32" placeholder="게임에서 사용하는 이름" required>
+              <label for="signupEmail">이메일 <span class="label-caption">· 로그인에 사용</span></label>
+              <input id="signupEmail" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
+              <label for="signupPassword">비밀번호 <span class="label-caption">· 8자 이상</span></label>
+              <input id="signupPassword" type="password" autocomplete="new-password" minlength="8" placeholder="안전한 비밀번호" required>
+              <button class="btn btn-primary form-submit" type="submit">가입 신청하기 <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="small-hint">가입 후에는 이메일 확인 설정에 따라 인증 메일이 필요할 수 있어요.</p>
+          </div>
+        </div>
+        <aside class="auth-side">
+          <span class="side-symbol">✳</span>
+          <span class="kicker">ONE ACCOUNT, EVERYWHERE</span>
+          <h3>PC가 달라져도<br>설정은 그대로.</h3>
+          <p>집에서 맞춘 버프 시간과 단축키를 다른 컴퓨터에서도 불러올 수 있어요. 현재 타이머의 남은 시간은 동기화되지 않습니다.</p>
+          <div class="side-mini"><span class="mini-avatar">B</span><div><strong>내 버프 프리셋</strong><span>계정별 클라우드 보관</span></div><span class="side-check">✓</span></div>
+          <div class="side-foot">※ 무료 운영 · 별도 Windows 프로그램 설치 필요</div>
+        </aside>
+      </section>
+
+      <section id="accountPanel" class="account-dashboard" hidden aria-labelledby="hello">
+        <div class="account-hero">
+          <div class="avatar" id="avatar" aria-hidden="true">B</div>
+          <div class="account-identity"><span class="kicker">MY ACCOUNT</span><h3 id="hello">안녕하세요!</h3><p id="accountInfo" class="account-info"></p><div id="accountStatus" class="status-badge"></div></div>
+          <div class="account-actions"><button id="refreshButton" class="btn btn-outline" type="button">새로고침</button><button id="logoutButton" class="btn btn-plain" type="button">로그아웃</button></div>
+        </div>
+        <div class="account-helper"><div class="account-helper-icon">✦</div><div><strong id="accountHelpTitle">클라우드 연결됨</strong><p id="accountHelp">프리셋은 Windows 앱에서 동기화할 수 있어요.</p></div></div>
+        <div id="accountDetails" class="account-details" hidden><div><span>저장된 프리셋</span><strong id="presetCount">—</strong></div><div><span>선택한 프리셋</span><strong id="currentPreset">—</strong></div><div><span>업데이트 배포</span><a href="https://github.com/gktmddn07101825-coder/Woobee/releases" target="_blank" rel="noopener noreferrer">GitHub에서 확인 ↗</a></div></div>
+      </section>
+
+      <section id="adminPanel" class="admin-dashboard" hidden aria-labelledby="admin-title">
+        <div class="admin-top"><div><span class="kicker">ADMIN DASHBOARD</span><h3 id="admin-title">관리자 대시보드</h3><p>Windows 버프타이머 실행 상태와 회원 승인 현황을 관리해요.</p></div><div class="admin-tools"><span class="refresh-caption">접속 현황 30초 간격 갱신</span><button id="loadUsersButton" class="btn btn-outline small" type="button">↻ 지금 새로고침</button></div></div>
+        <div class="stat-grid"><div class="stat-card"><span class="stat-icon online-icon">●</span><span>지금 접속 중</span><strong id="statOnline">—</strong><small>90초 이내 앱 신호</small></div><div class="stat-card"><span class="stat-icon pending-icon">◷</span><span>승인 대기</span><strong id="statPending">—</strong><small>확인이 필요한 가입자</small></div><div class="stat-card"><span class="stat-icon members-icon">♙</span><span>전체 회원</span><strong id="statTotal">—</strong><small>관리자 계정 포함</small></div></div>
+        <div class="member-list-heading"><div><h4>회원 관리 <span id="listCount">0</span></h4><p>검색·필터로 빠르게 찾고 승인 상태를 변경해 보세요.</p></div><label class="search-wrap"><span aria-hidden="true">⌕</span><span class="sr-only">아이디나 닉네임 검색</span><input id="memberSearch" type="search" placeholder="아이디 · 닉네임 검색" autocomplete="off"></label></div>
+        <div class="filter-list" role="group" aria-label="회원 필터"><button type="button" class="filter active" data-filter="all" aria-pressed="true">전체</button><button type="button" class="filter" data-filter="online" aria-pressed="false">접속 중</button><button type="button" class="filter" data-filter="pending" aria-pressed="false">승인 대기</button><button type="button" class="filter" data-filter="approved" aria-pressed="false">승인 완료</button><button type="button" class="filter" data-filter="blocked" aria-pressed="false">차단</button></div>
+        <div id="usersList" class="users-list" aria-live="polite"></div>
+        <p class="admin-disclaimer">온라인은 Windows 프로그램에서 보낸 마지막 신호를 기준으로 표시돼요. 앱을 강제 종료하면 최대 약 90초 동안 온라인으로 보일 수 있어요. 웹사이트 방문자는 집계하지 않습니다.</p>
+      </section>
+    </section>
+
+    <section class="how-section wrap" id="how" aria-labelledby="how-title">
+      <div class="section-heading"><span class="kicker">GET STARTED</span><h2 id="how-title">시작은 어렵지 않아요.</h2></div>
+      <div class="step-grid"><div class="step"><span>01</span><h3>사이트에서 가입</h3><p>아이디와 이메일로 간단히 계정을 만들어요.</p></div><div class="step"><span>02</span><h3>관리자 승인</h3><p>운영자가 가입 신청을 확인하고 승인해요.</p></div><div class="step"><span>03</span><h3>프로그램에서 로그인</h3><p>승인된 이메일과 비밀번호로 로그인하면 내 설정을 불러와요.</p></div></div>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap footer-inner"><div><strong>버프타이머</strong><p>게임은 더 편하게, 설정은 어디서나.</p></div><div class="footer-side"><span>계정 · 프리셋 · 관리자 승인: Supabase</span><span>프로그램 업데이트: GitHub Releases</span></div></div></footer>
+</body>
+</html>
